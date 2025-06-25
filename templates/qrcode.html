@@ -33,25 +33,24 @@
 
         }
 
-      share = () => {
-    const img = document.getElementById('image');
-    const url = img.src;
+        share = () =>{
+            const img = document.getElementById('image');
+            const url = img.src;
+            fetch(url).then(res => res.blob).then(blob => 
+            {
+                const file = new File([blob], 'qrcode.png', {type: 'image/png'});
+                if(navigator.share){
+                    navigator.share(
+                        {
+                            title: 'QR Code',
+                            text: "This is yor QR Code",
+                            files: [file]
+                        }
+                    )
+                }
+            })
 
-    fetch(url)
-        .then(res => res.blob())  // <-- FIXED: added () to call .blob()
-        .then(blob => {
-            const file = new File([blob], 'qrcode.png', { type: 'image/png' });
-            if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
-                navigator.share({
-                    title: 'QR Code',
-                    text: "This is your QR Code",
-                    files: [file]
-                }).catch(err => console.log("Share failed:", err));
-            } else {
-                alert("Sharing not supported on this browser or device.");
-            }
-        });
-};
+        }
 
     </script>
     
